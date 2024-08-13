@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import App_user
-
+from .models import PkmnStock
 # Register your models here.
 
-admin.site.register([App_user])
+admin.site.register([PkmnStock])

@@ -1,0 +1,10 @@
+[
+{
+  "model": "pkmnstock_app.pkmnstock",
+  "pk": 1,
+  "fields": {
+    "name": "Charizard",
+    "base_price": 1000.00
+  }
+}
+]
