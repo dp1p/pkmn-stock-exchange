@@ -13,9 +13,3 @@ class PkmnStock(models.Model):
 
     def __str__(self):  
         return self.name
-    
-    def pokemon_data(self):
-        data = fetch_pokemon_data(self.name) #this will grab the pokeapi info
-        if data:    #if there is any data
-            self.details = ('API DATA', data)
-            self.save()

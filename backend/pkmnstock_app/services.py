@@ -4,8 +4,13 @@
 
 import requests
 
-def fetch_pokemon_data(name):
-    response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{name}')
+def fetch_pokemon_data(pokemon_id):
+    if isinstance(pokemon_id, int):
+        url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}/"
+    else:
+        url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id.lower()}/"
+
+    response = requests.get(url)
     if response.status_code == 200:
         return response.json()
     else:

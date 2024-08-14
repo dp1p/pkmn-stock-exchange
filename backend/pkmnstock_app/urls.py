@@ -11,5 +11,5 @@ register_converter(IntOrStrConverter, 'int_or_str')
 #api/v1/pkmn/...
 urlpatterns = [
     path('allpkmn/', All_pokemon.as_view()),
-    path('<int_or_str:id>/', Pokemon_info.as_view()), #whether or not if id is int or str
+    path('<int_or_str:pokemon_id>/', Pokemon_info.as_view()), #whether or not if id is int or str
 ]
