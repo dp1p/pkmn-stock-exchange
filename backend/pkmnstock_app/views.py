@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from .models import PkmnStock
 from .serializers import PkmnStockSerializer #to see json information from the model
 from user_app.views import TokenReq #if there is a specific view only a user can see (like how many shares)
@@ -18,16 +18,34 @@ class All_pokemon(APIView):
 #view pokemon info REQUIRES LOGIN
 class Pokemon_info(TokenReq): 
     def get(self, request, id):
-        if type(id) == int:
+        try: #see if the id is a number
+            type(id) == int
             pokemon = PkmnStock.objects.get(id = id)
-            serializer = PkmnStockSerializer(pokemon)
-            return Response(serializer.data, status=HTTP_200_OK)
-        elif type(id) == str:
-            pokemon = PkmnStock.objects.get(name = id.title())
-            serializer = PkmnStockSerializer(pokemon)
-            return Response(serializer.data, status=HTTP_200_OK)
-        else:
-            return Response({'error':'No Pokemon or ID found'}, status=HTTP_400_BAD_REQUEST)
+        except ValueError:   #if it is not a number 
+            try: #see if the id is a str
+                pokemon = PkmnStock.objects.get(name=id.title())
+            except PkmnStock.DoesNotExist: #if the pokemon name isnt found
+                return Response({'error': 'No Pokemon found with provided name'}, status=HTTP_404_NOT_FOUND)
+        except PkmnStock.DoesNotExist: #if the pokemon id isnt found
+                return Response({'error': 'No Pokemon found with provided ID'}, status=HTTP_404_NOT_FOUND)
+        
+        serializer = PkmnStockSerializer(pokemon)
+        return Response(serializer.data, status=HTTP_200_OK)
+                
+            
+            
+        #         if not pokemon: #if pokemon id does not exist in the api
+        #              return Response({'error':'No Pokemon or ID found'}, status=HTTP_400_BAD_REQUEST)
+        #     elif type(id) == str: 
+        #         pokemon = PkmnStock.objects.get(name = id.title())
+        #         if not pokemon: #if pokemon name does not exist in the api
+        #              return Response({'error':'No Pokemon or ID found'}, status=HTTP_400_BAD_REQUEST)
+                
+        #     serializer = PkmnStockSerializer(pokemon)
+        #     return Response(serializer.data, status=HTTP_200_OK)
+        # except ValueError:
+        #     return Response({'error':'No Pokemon or ID found'}, status=HTTP_400_BAD_REQUEST)
+        
         
 
 

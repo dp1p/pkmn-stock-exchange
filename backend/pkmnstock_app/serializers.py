@@ -5,4 +5,4 @@ from .models import PkmnStock
 class PkmnStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = PkmnStock
-        fields = ['name', 'base_price' ]
+        fields = ['name', 'details']
