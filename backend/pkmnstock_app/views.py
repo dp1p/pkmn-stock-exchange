@@ -30,16 +30,18 @@ class Pokemon_info(TokenReq):
                 pokemon = PkmnStock.objects.get(name=pokemon_id.title())
             except PkmnStock.DoesNotExist:
                 pokemon = None
-
         
         # fetches data from the OUTSIDE database: PokeAPI
         if not pokemon:
             data = fetch_pokemon_data(pokemon_id)  #calls the fetch_pokemon_data func in services.py
             if data: #create new instance of the pkmn stock class
                 pokemon = PkmnStock.objects.create(
-                    pokedex_id = data.get('id'),  #we are grabbing the pokedex id from the data
                     name = data.get('name').title(), # we are grabbing the name from the data
-                    details = data
+                    pokedex_id = data.get('pokedex_id'),  #we are grabbing the pokedex id from the data
+                    what_type = data.get('types'),
+                    base_stats = data.get('base_stats'),
+                    move_count = data.get('move_count'),
+                    moves = data.get('moves')
                 )
             else:
                 return Response({'error': 'No data available from PokeAPI'}, status=HTTP_404_NOT_FOUND) #this is kind of misleading because it will only display pkmn info that are in our database
