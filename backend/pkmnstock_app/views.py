@@ -19,21 +19,31 @@ class All_pokemon(APIView):
 #view pokemon info REQUIRES LOGIN
 class Pokemon_info(TokenReq):
     def get(self, request, pokemon_id):
+        #this will first check if this pokemon is our local database...
         if isinstance(pokemon_id, int): #if the user enters is a digit num
-            # Assuming identifier is a valid ID if it's all digits
-            pokemon = get_object_or_404(PkmnStock, pk=pokemon_id)
-        else:
-            # Treat identifier as a name if it's not all digits
-            pokemon = get_object_or_404(PkmnStock, name=pokemon_id.title())
-        
-        # Fetch data from PokeAPI
-        data = fetch_pokemon_data(pokemon_id)  # This function should handle both names and IDs
-        if data:
-            pokemon.details = data  # Update the details directly on the model instance
-            pokemon.save()  # Save the model instance to persist changes
-        else:
-            return Response({'error': 'No data available from PokeAPI'}, status=HTTP_404_NOT_FOUND) #this is kind of misleading because it will only display pkmn info that are in our database
+            try:
+                pokemon = PkmnStock.objects.get(pokedex_id=pokemon_id) #grab the pokedex num
+            except PkmnStock.DoesNotExist: #else if the pkmn is NOT in our local database
+                pokemon = None
+        else: #the instance is str
+            try:
+                pokemon = PkmnStock.objects.get(name=pokemon_id.title())
+            except PkmnStock.DoesNotExist:
+                pokemon = None
 
-        # Serialize the Pokemon data and return the response
+        
+        # fetches data from the OUTSIDE database: PokeAPI
+        if not pokemon:
+            data = fetch_pokemon_data(pokemon_id)  #calls the fetch_pokemon_data func in services.py
+            if data: #create new instance of the pkmn stock class
+                pokemon = PkmnStock.objects.create(
+                    pokedex_id = data.get('id'),  #we are grabbing the pokedex id from the data
+                    name = data.get('name').title(), # we are grabbing the name from the data
+                    details = data
+                )
+            else:
+                return Response({'error': 'No data available from PokeAPI'}, status=HTTP_404_NOT_FOUND) #this is kind of misleading because it will only display pkmn info that are in our database
+
+        # serialize the Pokemon data and return the response into json format
         serializer = PkmnStockSerializer(pokemon)
         return Response(serializer.data, status=HTTP_200_OK)
