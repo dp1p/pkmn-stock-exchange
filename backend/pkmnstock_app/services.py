@@ -33,17 +33,59 @@ def fetch_pokemon_data(pokemon_id):
             type_name = type_info['type']['name']
             types.append(type_name)
 
+        # for values in base_stats.keys():
+        #     print(values)
+        # for keys in base_stats.keys():
+        #     print(keys)
+
+        base_price = 0
+        #to figure out the price:
+        for stat_name in base_stats: #iterating over dictionary with stat_name
+            match stat_name:    #least to greatest when it comes to the influence of the price, starting at 5% ending to 25%
+                case 'special-attack':
+                    _ = base_stats[stat_name] #get the value of the 'stat name'
+                    base_price += _ + (_*.05) #adding the base stat and increasing it by 5% for price evaulation
+                case 'special-defense':
+                    _ = base_stats[stat_name]
+                    base_price += _ + (_*.05)
+                case 'attack':
+                    _ = base_stats[stat_name]
+                    base_price += _ + (_*.10)
+                case 'defense':
+                    _ = base_stats[stat_name]
+                    base_price += _ + (_*.10)
+                case 'hp':
+                    _ = base_stats[stat_name]
+                    base_price += _ + (_*.15)
+                case 'speed':
+                    _ = base_stats[stat_name]
+                    base_price += _ + (_*.20)
+
+
+            # print(stat_name, base_stats[stat_name]) #print the stat name, stat value 
+            # base_price += base_stats[_]
+            # case
+
+        print(f"base price total: {base_price}")
+
+
+        
+
 
         return {
-            'name': data['name'].title(),
-            'pokedex_id': data['id'],
-            'base_stats': base_stats,
-            'types': types,
-            'move_count': len(moves),
-            'moves': moves
+            # 'name': data['name'].title(),
+            # 'pokede__id': data['id'],
+            # 'base_stats': base_stats,
+            # 'types': types,
+            # 'move_count': len(moves),
+            # 'moves': moves
 
         }
 
     
     else:
         return None
+
+#this is for testing and running just services.py
+pokemon = fetch_pokemon_data('charizard')
+print(pokemon)
