@@ -31,20 +31,24 @@ class Pokemon_info(TokenReq):
             except PkmnStock.DoesNotExist:
                 pokemon = None
         
-        # fetches data from the OUTSIDE database: PokeAPI
-        if not pokemon:
+        
+        # now we fetch data from the OUTSIDE database: PokeAPI
+        if not pokemon: #if pkmn is set to None
             data = fetch_pokemon_data(pokemon_id)  #calls the fetch_pokemon_data func in services.py
-            if data: #create new instance of the pkmn stock class
-                pokemon = PkmnStock.objects.create(
-                    name = data.get('name').title(), # we are grabbing the name from the data
-                    pokedex_id = data.get('pokedex_id'),  #we are grabbing the pokedex id from the data
-                    what_type = data.get('types'),
-                    base_stats = data.get('base_stats'),
-                    move_count = data.get('move_count'),
-                    moves = data.get('moves')
-                )
-            else:
-                return Response({'error': 'No data available from PokeAPI'}, status=HTTP_404_NOT_FOUND) #this is kind of misleading because it will only display pkmn info that are in our database
+            if not isinstance(data, dict): #checks the type of data, if it is not json/dict, then return response
+                return Response({'error': 'No data available from PokeAPI or it is a legendary / mythical Pokemon.'}, status=HTTP_404_NOT_FOUND)
+            
+            pokemon = PkmnStock.objects.create(
+                name = data.get('name').title(), # we are grabbing the name from the data
+                pokedex_id = data.get('pokedex_id'),  #we are grabbing the pokedex id from the data
+                description = data.get('description'),
+                what_type = data.get('types'),
+                base_stats = data.get('base_stats'),
+                move_count = data.get('move_count'),
+                moves = data.get('moves'),
+                base_price = data.get('base_price'),
+                evolution_stages = data.get('evolution_stages')
+            )
 
         # serialize the Pokemon data and return the response into json format
         serializer = PkmnStockSerializer(pokemon)

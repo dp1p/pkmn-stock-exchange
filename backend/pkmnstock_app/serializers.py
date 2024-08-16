@@ -5,4 +5,5 @@ from .models import PkmnStock
 class PkmnStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = PkmnStock
-        fields = ['name', 'pokedex_id', 'what_type', 'base_stats', 'move_count', 'moves' ]
+        fields = ['name', 'pokedex_id', 'what_type', 'description', 'base_stats', 'base_price', 'move_count', 'evolution_stages' ]
+        #'moves'

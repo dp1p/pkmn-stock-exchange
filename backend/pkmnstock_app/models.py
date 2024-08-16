@@ -2,9 +2,6 @@ import requests
 from django.db import models
 from django.core import validators as v
 
-#we will use .services to grab the pokemon from the api
-from .services import fetch_pokemon_data
-
 # Create your models here.
 class PkmnStock(models.Model):
     pokedex_id = models.IntegerField(unique=True) #this is here so now the admin must enter the pokedex no. of a pokemon to get valid information
@@ -16,6 +13,8 @@ class PkmnStock(models.Model):
     what_type = models.JSONField(blank=True, null=True)
     base_stats = models.JSONField(blank=True, null=True)
     move_count = models.JSONField(blank=True, null=True)
-
+    base_price = models.JSONField(blank=True, null=True)
+    description = models.JSONField(blank=True, null=True)
+    evolution_stages = models.JSONField(blank=True, null=True)
     def __str__(self):  
         return f"{self.name} (Pokedex ID: {self.pokedex_id})"
