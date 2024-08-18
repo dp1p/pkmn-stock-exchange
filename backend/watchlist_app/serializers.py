@@ -1,23 +1,18 @@
 from rest_framework import serializers
 from pkmnstock_app.models import PkmnStock
 
+class PkmnWatchlistSerializer(serializers.ModelSerializer): #creating a serializer using the 'pkmnstock' model to display SPECIFIC info
+    class Meta:
+        model = PkmnStock #use the 'PkmnStock' model
+        fields = ['name', 'base_price'] #and display certain info
+
 class WatchlistSerializer(serializers.ModelSerializer):
-    pokemon = serializers.SerializerMethodField() 
+    pokemon = PkmnWatchlistSerializer(many=True) 
 
     #specify what we want to return in here
     class Meta:
         model = PkmnStock #specify what model we want to grab
-        fields = ['name', 'base_price']
-
-    def get_pokemon(self, instance):
-        #get a list of all the pkmn which our watchlist has
-        pokemon = instance.pokemon.all()
-
-        #turns the list of obj to list of dictionaries
-        ser_pokemon = [{'name': p.name} for p in pokemon]
-
-        return ser_pokemon
-
+        fields = ['name', 'pokemon'] #get the name of our watch, and return what pokemon is in it
 
 
 
