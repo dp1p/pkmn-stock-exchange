@@ -16,5 +16,9 @@ class PkmnStock(models.Model):
     base_price = models.JSONField(blank=True, null=True)
     description = models.JSONField(blank=True, null=True)
     evolution_stages = models.JSONField(blank=True, null=True)
+    price_history = models.JSONField(blank=True, null=True)
+
+
+
     def __str__(self):  
         return f"{self.name} (Pokedex ID: {self.pokedex_id})"

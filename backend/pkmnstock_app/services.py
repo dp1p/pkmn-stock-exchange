@@ -79,6 +79,9 @@ def determine_price(base_stats, moves, types, check_status, pokemon_id):     #gr
 
     # print(f'Base Price: {round(base_price,2)}')
     return f"{base_price:.2f}", stage
+
+
+
 #--------   MAIN   ----------------------------------------------------------------------------------------------
 #function to grab information about pkmn
 def fetch_pokemon_data(pokemon_id):
@@ -91,7 +94,7 @@ def fetch_pokemon_data(pokemon_id):
 
     check_status = requests.get(check_status) #grabs the api information of the pkmn species
     check_status = check_status.json()  #makes it to json
-    description = check_status['flavor_text_entries'][0]['flavor_text'] #grabs a the text entry from pokedex
+    description = check_status['flavor_text_entries'][1]['flavor_text'] #grabs a the text entry from pokedex
     description = description.replace('\n', ' ')
     description =  description.replace('\f', ' ')
 
