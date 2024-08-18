@@ -1,4 +1,3 @@
-import requests
 from django.db import models
 from django.core import validators as v
 
@@ -22,3 +21,6 @@ class PkmnStock(models.Model):
 
     def __str__(self):  
         return f"{self.name} (Pokedex ID: {self.pokedex_id})"
+    
+    def info(self):
+        print(f"Name: {self.name} || Pokedex ID: {self.pokedex_id} || Price: {self.base_price}")

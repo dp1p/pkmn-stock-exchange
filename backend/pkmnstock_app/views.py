@@ -52,4 +52,7 @@ class Pokemon_info(TokenReq):
 
         # serialize the Pokemon data and return the response into json format
         serializer = PkmnStockSerializer(pokemon)
+        #this is for using the shell
+        print(f"Name: {pokemon.name} || Pokedex ID: {pokemon.pokedex_id} || Price: {pokemon.base_price}")
         return Response(serializer.data, status=HTTP_200_OK)
+    
