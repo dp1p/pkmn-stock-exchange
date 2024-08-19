@@ -59,4 +59,4 @@ class Log_out(TokenReq):
     
 class Info(TokenReq):
     def get(self, request):
-        return Response({'email': request.user.email,})
+        return Response({'email': request.user.email})
