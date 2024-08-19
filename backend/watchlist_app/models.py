@@ -4,11 +4,11 @@ from pkmnstock_app.models import PkmnStock
 
 class Watchlist(models.Model): 
     user = models.ForeignKey(App_user, on_delete=models.Model) #a user can have many watchlist, which the watchlist be tied to only one user
-    watchlist_name = models.CharField() #to give the watchlist a name
+    name = models.CharField(max_length=30, unique=True) #to give the watchlist a name
     pokemon = models.ManyToManyField(PkmnStock, related_name='watchlist') #we will associate whatever pkmn the user adds to their watchlist
     #the related name establishes a reverse relationship to the model.
 
     def __str__(self):
-        return f" '{self.watchlist_name}' Watchlist has been successfully created."
+        return f" '{self.name}' Watchlist has been successfully created."
 
 

@@ -1,18 +1,20 @@
 from rest_framework import serializers
 from pkmnstock_app.models import PkmnStock
+from .models import Watchlist
 
-class PkmnWatchlistSerializer(serializers.ModelSerializer): #creating a serializer using the 'pkmnstock' model to display SPECIFIC info
+class PkmnWatchlistSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PkmnStock #use the 'PkmnStock' model
-        fields = ['name', 'base_price'] #and display certain info
+        model = PkmnStock
+        fields = ['name', 'base_price']
 
 class WatchlistSerializer(serializers.ModelSerializer):
-    pokemon = PkmnWatchlistSerializer(many=True) 
-
-    #specify what we want to return in here
+    pokemon = PkmnWatchlistSerializer(many=True, read_only=True, required=False)
+    
     class Meta:
-        model = PkmnStock #specify what model we want to grab
-        fields = ['name', 'pokemon'] #get the name of our watch, and return what pokemon is in it
+        model = Watchlist
+        fields = ['name', 'pokemon']
 
-
-
+    def create(self, validated_data): #creating a new watchlist to ensure that it is connected to the user (was geting a 'user_id' is null error without this)
+        user = self.context['request'].user  #grab the currently authenticated user from the 'request' #'context' allows serializers to acces the information of .user
+        watchlist = Watchlist.objects.create(user=user, **validated_data) #create watchlist with the user_id tied to the watchlist with validated data
+        return watchlist

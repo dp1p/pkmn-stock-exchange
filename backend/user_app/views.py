@@ -26,7 +26,7 @@ class Sign_Up(APIView): #we check the user info to see if it is validated, if so
             new_user.set_password(data.get("password"))
             new_user.save()
             token = Token.objects.create(user=new_user)
-            login(request, new_user)
+            login(request, new_user) #log the new user in
             response_data = ({'user': new_user.email, 'token': token.key})
             return Response(response_data, status=HTTP_201_CREATED)
         except ValidationError as e:
