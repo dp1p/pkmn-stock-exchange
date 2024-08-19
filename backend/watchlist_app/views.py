@@ -81,4 +81,40 @@ class Update_watchlist(TokenReq):
         ser_watchlist = WatchlistSerializer(watchlist)
         return Response(ser_watchlist.data, status=HTTP_200_OK)
 
+#DELETE a pokemon from watchlist
+class Delete_from_watchlist(TokenReq):
+    def delete(self, request, watchlist_name):
+        try:
+            watchlist = Watchlist.objects.get(name=watchlist_name)
+        except Watchlist.DoesNotExist:
+            return Response({'message' : f"'{watchlist_name}' does not exist."}, status=HTTP_404_NOT_FOUND)
         
+        #grab the pokedex_id the user request either name or by id thanks to pokmeon info handling str and ints
+        pokemon_id_or_name = request.data.get('pokemon_id_or_name')
+        if not pokemon_id_or_name:
+            return Response({"message": "Please provide a Pokémon name or Pokédex ID."}, status=HTTP_400_BAD_REQUEST)
+        
+       # fetch the pokemon by ID or name
+        if pokemon_id_or_name.isdigit():
+            pokemon = get_object_or_404(PkmnStock, pokedex_id=pokemon_id_or_name)
+        else:
+            pokemon = get_object_or_404(PkmnStock, name=pokemon_id_or_name.title())
+
+        watchlist.pokemon.remove(pokemon)
+        watchlist.save()
+        # serialize and return the updated watchlist
+        ser_watchlist = WatchlistSerializer(watchlist)
+        return Response(ser_watchlist.data, status=HTTP_200_OK)
+
+
+#DELETE entire watchlist
+class Delete_watchlist(TokenReq):
+    def delete(self, request, watchlist_name):
+        try:    #retrieve watchlist by name and the current user
+            watchlist = Watchlist.objects.get(name=watchlist_name, user=request.user)
+        except Watchlist.DoesNotExist:
+            return Response({"message" : f"'{watchlist_name}' does not exist."})
+        
+        watchlist.delete()
+        return Response({'message' : f" '{watchlist_name}' has been deleted."})
+
