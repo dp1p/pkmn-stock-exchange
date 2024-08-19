@@ -2,7 +2,7 @@ from rest_framework import serializers
 from pkmnstock_app.models import PkmnStock
 from .models import Watchlist
 
-class PkmnWatchlistSerializer(serializers.ModelSerializer):
+class PkmnWatchlistSerializer(serializers.ModelSerializer):  #creating our own pkmnstock serializer to display certain info when calling the pkmnstock model
     class Meta:
         model = PkmnStock
         fields = ['name', 'base_price']

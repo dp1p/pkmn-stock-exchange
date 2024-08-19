@@ -10,8 +10,6 @@ from pkmnstock_app.models import PkmnStock #to get the pkmn
 
 #CRUD MODEL 
 
-
-
 # CREATE a watchlist
 class Create_watchlist(TokenReq):
     def post(self, request):

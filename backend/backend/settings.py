@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'user_app',
     'pkmnstock_app',
     'watchlist_app',
+    'portfolio_app'
 ]
 
 MIDDLEWARE = [
