@@ -11,16 +11,16 @@ import requests, random
 
 
 #-------function to figure out if pkmn has an evolution stage------------------
-def evolution_stage_price(base_price, check_status, pokemon_id):
+def evolution_stage_price(base_price, check_status):
     evolution_stages = check_status['evolution_chain']['url'] #first grab the url
     evolution_stages = requests.get(evolution_stages).json()  #then grab the json data
     current_stage = evolution_stages['chain'] #Traverse the evolution chain to determine the stage
     stage = 1  # start with the base stage
 
-    pokemon_id = str(pokemon_id).lower()
+    pokemon_name = check_status['name'].lower() # grab name
     
     while current_stage:
-        if current_stage['species']['name'] == pokemon_id: #if the current pkmn stage equal to the pkmn name
+        if current_stage['species']['name'] == pokemon_name: #if the current pkmn stage equal to the pkmn name
             break
         if len(current_stage['evolves_to']) == 0:
             break
@@ -33,7 +33,7 @@ def evolution_stage_price(base_price, check_status, pokemon_id):
     return ((base_price * stage), stage)  # multiply based on num of stages
 
 #-------function to figure out price------------------
-def determine_price(base_stats, moves, types, check_status, pokemon_id):     #grabbing check_status because it has the evolution chain
+def determine_price(base_stats, moves, types, check_status):     #grabbing check_status because it has the evolution chain
     base_price = 0
     for stat_name in base_stats: #iterating over dictionary with stat_name
         match stat_name:    #least to greatest when it comes to the influence of the price, starting at 5% ending to 25%
@@ -71,7 +71,7 @@ def determine_price(base_stats, moves, types, check_status, pokemon_id):     #gr
         base_price += 0
 
 
-    base_price, stage = evolution_stage_price(base_price, check_status, pokemon_id) #we need to pass in the base_price, our pkmn name we are using, and their status || once passed, we want the return values of BASE PRICE, EVOLUTION STAGE
+    base_price, stage = evolution_stage_price(base_price, check_status) #we need to pass in the base_price, our pkmn name we are using, and their status || once passed, we want the return values of BASE PRICE, EVOLUTION STAGE
 
     
 
@@ -133,7 +133,7 @@ def fetch_pokemon_data(pokemon_id):
             types.append(type_name)
         
         
-        base_price, stage = determine_price(base_stats, moves, types, check_status, pokemon_id) #calls a func to determine price based on base_stats, but we also want the evolution stage count so we have to pass by reference?
+        base_price, stage = determine_price(base_stats, moves, types, check_status) #calls a func to determine price based on base_stats, but we also want the evolution stage count so we have to pass by reference?
 
         return {    #returns all information to the views
             'name': data['name'],

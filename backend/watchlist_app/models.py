@@ -8,7 +8,5 @@ class Watchlist(models.Model):
     pokemon = models.ManyToManyField(PkmnStock, related_name='watchlist') #we will associate whatever pkmn the user adds to their watchlist
     #the related name establishes a reverse relationship to the model.
 
-    def __str__(self):
-        return f" '{self.name}' Watchlist has been successfully created."
-
-
+    def __str__(self): #this shows in django admin
+        return f"  Watchlist : '{self.name}' ."
