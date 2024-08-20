@@ -55,12 +55,12 @@ class Get_watchlist(TokenReq):
 class Update_watchlist(TokenReq):
     def put(self, request, watchlist_name):
         try:
-            watchlist = Watchlist.objects.get(name=watchlist_name)
+            watchlist = Watchlist.objects.get(name=watchlist_name) #get watchlist name
         except Watchlist.DoesNotExist:
             return Response({'message' : f"'{watchlist_name}' does not exist."}, status=HTTP_404_NOT_FOUND)
         
-        #grab the pokedex_id the user request either name or by id thanks to pokmeon info handling str and ints
-        pokemon_id_or_name = request.data.get('pokemon_id_or_name')
+       
+        pokemon_id_or_name = request.data.get('pokemon_id_or_name')  #grab the pokedex_id the user request either name or by id thanks to pokmeon info handling str and ints
         if not pokemon_id_or_name:
             return Response({"message": "Please provide a Pokémon name or Pokédex ID."}, status=HTTP_400_BAD_REQUEST)
         

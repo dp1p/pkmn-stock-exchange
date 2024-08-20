@@ -13,7 +13,7 @@ class Portfolio(models.Model):
 class PkmnPortfolio(models.Model): 
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='pkmn_in_portfolio') #to connect portfolio, which the portfolio can have many pokemon
     pokemon = models.ForeignKey(PkmnStock, on_delete=models.CASCADE, related_name='portfolio') #one portfolio can have many pkmn, we can grab the information of the pkmn thru here like price
-    shares = models.IntegerField(default=1)  # number of shares purchased / or sold
+    shares = models.IntegerField(default=1)  # default value of 1 to prevent null / empty
     purchase_date = models.DateTimeField(auto_now_add=True)  # date of purchase
     total_price = models.DecimalField(max_digits=12, decimal_places=2)  # TOTAL price at which the shares were purchased
 

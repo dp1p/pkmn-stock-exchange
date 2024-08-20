@@ -36,7 +36,7 @@ class View_portfolio(TokenReq):
             return Response({"message" : "You have no portfolio yet."}, status=HTTP_204_NO_CONTENT)
     
 #BUYING pkmn to our PORTFOLIO
-class Buy_portfolio(TokenReq):
+class Buy_pokemon(TokenReq):
     def post(self, request):
         pokemon_id_or_name = request.data.get('pokemon_id_or_name')  #grab the users request of the pkmn they want to buy
         shares = int(request.data.get('shares', 1)) #how many shares the user wants to buy
@@ -91,3 +91,55 @@ class Buy_portfolio(TokenReq):
 
         ser_portfolio = PortfolioSerializer(portfolio)
         return Response(ser_portfolio.data, status=HTTP_200_OK)
+
+class Sell_pokemon(TokenReq):
+    def delete(self, request):
+        pokemon_id_or_name = request.data.get('pokemon_id_or_name')
+        shares_to_sell = int(request.data.get('shares', 1))  # number of shares to sell, defaults to 1
+
+        # 1. grab the portfolio of the user first
+        try:
+            portfolio = Portfolio.objects.get(user=request.user)  
+        except Portfolio.DoesNotExist:
+            return Response({"message": "Portfolio not found."}, status=HTTP_404_NOT_FOUND)
+
+        #2. check if there is no pokemon name / id entered
+        if not pokemon_id_or_name: 
+            return Response({"message": "Please provide a valid Pokémon name or ID."}, status=HTTP_400_BAD_REQUEST)
+
+
+        #3. if the user enters a pokemon / pokedex no. and if it exists
+        try: 
+            if pokemon_id_or_name.isdigit():
+                pokemon = PkmnStock.objects.get(pokedex_id=pokemon_id_or_name)
+            else:
+                pokemon = PkmnStock.objects.get(name=pokemon_id_or_name.title())
+        except PkmnStock.DoesNotExist: 
+            return Response({"message": "Pokémon not found in portfolio."}, status=HTTP_404_NOT_FOUND)
+
+        #4. grab the user's portfolio and see if there is the pkmn in their portfolio
+        try:
+            pkmn_portfolio = PkmnPortfolio.objects.get(portfolio=portfolio, pokemon=pokemon) 
+        except PkmnPortfolio.DoesNotExist:
+            return Response({"message": "Pokémon not found in your portfolio."}, status=HTTP_404_NOT_FOUND)
+
+        if pkmn_portfolio.shares < shares_to_sell:  # check if there are enough shares to sell
+            return Response({"message": "Not enough shares to sell."}, status=HTTP_400_BAD_REQUEST)
+
+       
+        sale_value = Decimal(pokemon.base_price) * shares_to_sell  # calculate the sale value
+
+        #5. update the shares and the portfolio buying power
+        pkmn_portfolio.shares -= shares_to_sell #subtract the shares from portfolio
+        portfolio.buying_power += sale_value #add money to the buying power
+        portfolio.total_portfolio -= sale_value #subtract the portfolio value
+
+        if pkmn_portfolio.shares == 0:  # if all shares are sold, DELETE from portfolio
+            pkmn_portfolio.delete()
+        else:
+            pkmn_portfolio.save()
+
+        portfolio.save()
+
+        serializer = PortfolioSerializer(portfolio)
+        return Response(serializer.data, status=HTTP_200_OK)
