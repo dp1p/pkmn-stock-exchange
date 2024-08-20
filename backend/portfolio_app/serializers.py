@@ -2,14 +2,19 @@ from rest_framework import serializers
 from pkmnstock_app.models import PkmnStock
 from .models import Portfolio, PkmnPortfolio
 
-class PkmnPortfolio(serializers.ModelSerializer): #creating our own pkmnstock serializer to display certain info when calling the pkmnstock model
+class PkmnPortfolioSerializer(serializers.ModelSerializer): #creating our own pkmnstock serializer to display certain info when calling the pkmnstock model
+    pokemon = serializers.CharField(source='pokemon.name')  # will grab the 'name' from the pkmnstock model in the class 'meta'
+    price_per_share = serializers.DecimalField(source='pokemon.base_price', max_digits=12, decimal_places=2) # will grab the 'price' of the pkmn name from the pkmnstock model in the class 'meta'
+
     class Meta:
-        model = PkmnStock
-        fields = ['name', 'base_price', 'shares_purchased']
+        model = PkmnStock #uses the model 'pkmnstock', but we also have the 'portfolio' model thanks to relational database
+        fields = ['pokemon', 'shares_purchased', 'price_per_share', 'total_price', 'purchase_date']
 
 class PortfolioSerializer(serializers.ModelSerializer):
-    pokemon = PkmnPortfolio(many=True, read_only=True, required=False)
+    pokemon = PkmnPortfolioSerializer(many=True, read_only=True, source='pkmn_in_portfolio')
 
     class Meta:
         model = Portfolio
-        fields = ['user', 'buying_power', 'total_portfolio']
+        fields = ['user', 'buying_power', 'total_portfolio', 'pokemon']
+
+        

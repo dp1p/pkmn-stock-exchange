@@ -27,7 +27,6 @@ class Create_watchlist(TokenReq):
         else:
             return Response(new_watchlist.errors, status=HTTP_400_BAD_REQUEST)
             
-
 # READ ALL watchlist
 class All_watchlist(TokenReq):
     def get(self, request):

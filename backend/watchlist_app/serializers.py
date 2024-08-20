@@ -15,6 +15,6 @@ class WatchlistSerializer(serializers.ModelSerializer):
         fields = ['name', 'pokemon']
 
     def create(self, validated_data): #creating a new watchlist to ensure that it is connected to the user (was geting a 'user_id' is null error without this)
-        user = self.context['request'].user  #grab the currently authenticated user from the 'request' #'context' allows serializers to acces the information of .user
+        user = self.context['request'].user  #grab the currently authenticated user from the 'request' #'context' allows serializers to access the information of .user
         watchlist = Watchlist.objects.create(user=user, **validated_data) #create watchlist with the user_id tied to the watchlist with validated data
         return watchlist

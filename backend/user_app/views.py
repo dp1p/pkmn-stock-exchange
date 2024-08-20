@@ -16,7 +16,7 @@ from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 
-class Sign_Up(APIView): #we check the user info to see if it is validated, if so, save
+class Sign_up(APIView): #we check the user info to see if it is validated, if so, save
     def post(self, request):
         data = request.data.copy()
         data['username'] = data.get('email') #data['username'] needs to find what our username is set, in this is email

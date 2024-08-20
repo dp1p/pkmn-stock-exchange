@@ -3,7 +3,7 @@ from user_app.models import App_user #importing this so we can make a watchlist 
 from pkmnstock_app.models import PkmnStock
 
 class Watchlist(models.Model): 
-    user = models.ForeignKey(App_user, on_delete=models.Model) #a user can have many watchlist, which the watchlist be tied to only one user
+    user = models.ForeignKey(App_user, on_delete=models.CASCADE) #a user can have many watchlist, which the watchlist be tied to only one user
     name = models.CharField(max_length=30, unique=True) #to give the watchlist a name
     pokemon = models.ManyToManyField(PkmnStock, related_name='watchlist') #we will associate whatever pkmn the user adds to their watchlist
     #the related name establishes a reverse relationship to the model.
