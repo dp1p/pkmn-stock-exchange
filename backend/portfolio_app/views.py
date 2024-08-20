@@ -25,7 +25,7 @@ class Create_portfolio(TokenReq):
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-#READING portfolio
+#READING our portfolio
 class View_portfolio(TokenReq):
     def get(self, request):
         try:
@@ -35,11 +35,11 @@ class View_portfolio(TokenReq):
         except Portfolio.DoesNotExist:
             return Response({"message" : "You have no portfolio yet."}, status=HTTP_204_NO_CONTENT)
     
-#UPDATING PORTFOLIO
+#BUYING pkmn to our PORTFOLIO
 class Buy_portfolio(TokenReq):
     def post(self, request):
         pokemon_id_or_name = request.data.get('pokemon_id_or_name')  #grab the users request of the pkmn they want to buy
-        shares_purchased = int(request.data.get('shares_purchased', 1)) #how many shares the user wants to buy
+        shares = int(request.data.get('shares', 1)) #how many shares the user wants to buy
 
         if pokemon_id_or_name.isdigit(): # if the user enters a pokedex no. / and is in our local db in 'pkmnstock' model
             try:
@@ -65,7 +65,7 @@ class Buy_portfolio(TokenReq):
 
         
         base_price = Decimal(pokemon.base_price)    #convert the jsonfield from 'pkmnstock' model to be a decimal 
-        total_purchase_cost = base_price * shares_purchased #find the total purchase cost
+        total_purchase_cost = base_price * shares #find the total purchase cost
 
         
         if portfolio.buying_power < total_purchase_cost: # make sure the user has enough buying power
@@ -76,11 +76,11 @@ class Buy_portfolio(TokenReq):
         
         pkmn_portfolio, created = PkmnPortfolio.objects.get_or_create( # get or create the portfolio entry for the pkmnstock being added
             portfolio=portfolio, pokemon=pokemon,
-            defaults={'shares_purchased': shares_purchased, 'total_price': total_purchase_cost}  #if the Pokémon is not already in the portfolio, create a new entry with the given shares and total price using the serializer
+            defaults={'shares': shares, 'total_price': total_purchase_cost}  #if the Pokémon is not already in the portfolio, create a new entry with the given shares and total price using the serializer
         )
 
         if not created: #if that pkmn entry in our portfolio has already existed, just update
-            pkmn_portfolio.shares_purchased += shares_purchased
+            pkmn_portfolio.shares += shares
             pkmn_portfolio.total_price += total_purchase_cost
             pkmn_portfolio.save()
 

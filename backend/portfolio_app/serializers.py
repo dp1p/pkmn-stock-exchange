@@ -8,7 +8,7 @@ class PkmnPortfolioSerializer(serializers.ModelSerializer): #creating our own pk
 
     class Meta:
         model = PkmnPortfolio #uses the model 'pkmnportfolio' because we want to use these specfic field
-        fields = ['pokemon', 'shares_purchased', 'price_per_share', 'total_price', 'purchase_date']
+        fields = ['pokemon', 'shares', 'price_per_share', 'total_price', 'purchase_date']
 
 class PortfolioSerializer(serializers.ModelSerializer):
     pokemon = PkmnPortfolioSerializer(many=True, read_only=True, source='pkmn_in_portfolio')
@@ -16,4 +16,5 @@ class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
         fields = ['user', 'buying_power', 'total_portfolio', 'pokemon']
+
 
