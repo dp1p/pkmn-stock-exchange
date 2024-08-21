@@ -1,9 +1,7 @@
-function NotFound() {
+export default function NotFound() {
   return (
     <>
-      <div>404 Not Found</div>
+      <h1 className="text-blue-300">Not Found</h1>
     </>
   );
 }
-
-export default NotFound;
