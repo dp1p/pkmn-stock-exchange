@@ -19,12 +19,14 @@ export default function Navbar() {
       <div>
           <form className="d-flex">
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-            <button className="btn btn-success" type="submit"><i class="bi bi-search"></i></button>
+            <button className="btn btn-outline-warning" type="submit">
+              <i className="bi bi-search"></i>
+            </button>
           </form>
         </div>
 
        {/* right */}
-        <NavLink to="#" activeClassName="active" className="navbar-item text-white mr-3">
+        <NavLink to="/login/" activeClassName="active" className="navbar-item text-white mr-3">
             <button type="button" className="btn btn-warning">Logout</button>
           </NavLink>
     </nav>
