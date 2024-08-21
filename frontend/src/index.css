@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ----------- NAV BAR -------------------- */
 /* to get rid of underline when intialized */
 .navbar-item { 
     text-decoration: none;
@@ -15,4 +16,11 @@
 /* Underline when the item is active (i.e., selected) */
 .navbar-item.active {
     text-decoration: underline;
+}
+
+
+/* ----------- LOGIN/SIGNUP FORMS -------------------- */
+.custom-form {
+    padding: max(100px);
+    width: max(500px);
 }

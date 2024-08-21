@@ -6,12 +6,12 @@ export default function App() {
   const location = useLocation(); 
 
   //store the path files in an array
-  const hideNavbar = ["/login/", "/signup/"].includes(location.Login, location.SignUp)
+  const hideNavbar = ["/login/", "/signup"].includes(location.pathname)
 
   
   return (
     <>
-      <Navbar/>
+      {!hideNavbar && <Navbar/>}
       <Outlet />
     </>
   );
