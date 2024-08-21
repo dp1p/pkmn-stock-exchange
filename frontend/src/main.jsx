@@ -5,8 +5,11 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router.jsx";
 //for bootstramp
 import "bootstrap/dist/css/bootstrap.min.css";
+//for bootsrap icons
+import "bootstrap-icons/font/bootstrap-icons.css";
 //for tailwind
 import "./index.css";
+
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(

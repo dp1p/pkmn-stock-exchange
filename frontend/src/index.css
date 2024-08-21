@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* to get rid of underline when intialized */
+.navbar-item { 
+    text-decoration: none;
+}
+
+/* when hovering over an item */
+.navbar-item:hover {
+    text-decoration: underline
+}
+
+/* Underline when the item is active (i.e., selected) */
+.navbar-item.active {
+    text-decoration: underline;
+}
