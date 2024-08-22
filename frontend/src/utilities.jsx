@@ -57,6 +57,7 @@ export const logOut = async () => {
     if (response.status === 204){
         localStorage.removeItem("token")
         delete api.defaults.headers.common["Authorization"]
+        alert("Logged out successfully! :( ")
         return null
     }
     alert("Something went wrong! Try logging out again")
