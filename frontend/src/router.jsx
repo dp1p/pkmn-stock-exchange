@@ -8,16 +8,19 @@ import NotFound from "./pages/NotFound.jsx"
 import Watchlist from "./pages/Watchlist.jsx";
 //for tailwind
 import "./index.css";
+//to confirm that there is a user
+import { confirmUser } from "./utilities.jsx";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: confirmUser,
     element: <App />,
     children: [
       {
         index: true,
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/login",
@@ -25,14 +28,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/signup",
-        element: <SignUp/>
+        element: <SignUp />,
       },
       {
-        path:"/watchlist",
-        element: <Watchlist/>
+        path: "/watchlist",
+        element: <Watchlist />,
       },
     ],
-    errorElement: <NotFound/>,
+    errorElement: <NotFound />,
   },
 ]);
 

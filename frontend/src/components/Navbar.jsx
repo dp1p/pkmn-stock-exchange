@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"; // Unlike href, it does not send a whole request / refresh the browser, allowing seamless integration. navlink adds more stylizations
+import { logOut } from "../utilities";
 
 export default function Navbar() {
   return (
@@ -26,9 +27,7 @@ export default function Navbar() {
         </div>
 
        {/* right */}
-        <NavLink to="/login/" activeClassName="active" className="navbar-item text-white mr-3">
-            <button type="button" className="btn btn-warning">Logout</button>
-          </NavLink>
+            <button type="button" onClick={logOut} className="btn btn-warning mr-3">Logout</button>
     </nav>
     </>
   );
