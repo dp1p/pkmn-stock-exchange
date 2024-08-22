@@ -81,3 +81,32 @@ export const logOut = async () => {
 //     </div>
 //   );
 // }
+// -------------- GRAB USER BUYING POWER --------------------
+
+export const view_portfolio = async () => {
+  try {
+    //get token first
+    const token = localStorage.getItem("token");
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Token ${token}`;
+    } else {
+      alert("No token found. Please log in.");
+      return null;
+    }
+    //get portfolio
+    const response = await api.get("portfolio/"); 
+    if (response.status === 200) {
+      return response.data; // Return the portfolio data
+    } else {
+      alert("Failed to load portfolio. Please try again.");
+      return null;
+    }
+  } catch (error) {
+    // Handle any errors (e.g., network errors, server errors)
+    console.error("Failed to fetch portfolio:", error);
+    alert("Failed to load portfolio. Please try again.");
+    return null;
+  }
+};
+
+//--------------------
