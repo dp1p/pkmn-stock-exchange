@@ -10,7 +10,7 @@ export default function App() {
 
   return (
     <>
-      {!hideNavbar && <Navbar />}
+      {!hideNavbar && <Navbar user = {user} setUser={setUser} />}
       <Outlet context={{user, setUser}}/>
     </>
   );

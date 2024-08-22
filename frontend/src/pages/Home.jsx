@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
     <div>
-        <h1 className="text-blue-500">Homepage of: {user}</h1>
+        <h1 className="text-blue-500">Homepage of: {user && user}</h1>
     </div>
     </>
   );
