@@ -29,10 +29,18 @@ export default function SignUp() {
         {/* to make the form aligned */}
         <div className="container d-flex justify-content-center align-items-center vh-100">
           {/* to add custom css to the form */}
-          <div className="bg-white rounded-xl custom-form">
+          <div className="bg-white rounded-xl custom-form p-5">
             {/* to handle submission of the form */}
             <form onSubmit={(e) => handleSubmit(e)}>
-              {" "}
+              {/* align and resize the Pokeball image */}
+              <div className="d-flex justify-content-center mb-4">
+                <img
+                  src="/pokeball.png"  // use absolute path for images in the public folder
+                  alt="Pokeball"
+                  className="w-24 h-24"
+                  style={{ width: "100px", height: "100px" }} 
+                />
+              </div>
               {/* calling to the utilties jsx */}
               <h1 className="d-flex justify-content-center">Sign Up Today!</h1>
               {/* email input */}
@@ -49,7 +57,7 @@ export default function SignUp() {
                   required
                 />
                 <small id="emailHelp" className="form-text text-muted">
-                  We will not share your email to anyone.
+                  We will not share your email with anyone.
                 </small>
               </div>
               {/* password input */}
@@ -77,7 +85,7 @@ export default function SignUp() {
                 <button
                   type="submit"
                   className="btn btn-outline-primary"
-                  value="Resigter"
+                  value="Register"
                 >
                   Register
                 </button>
@@ -89,6 +97,3 @@ export default function SignUp() {
     </>
   );
 }
-
-
-

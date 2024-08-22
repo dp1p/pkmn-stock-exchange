@@ -8,19 +8,18 @@ export default function Login() {
   const { setUser } = useOutletContext();
   const navigate = useNavigate();
 
-   const handleSubmit = async (e) => {
-     e.preventDefault();
-     try {
-       //try create account first
-       const user = await log_in(email, password);
-       setUser(user);
-       alert("Success! Welcome!");
-       navigate("/");
-     } catch (error) {
-       // if the error is an http 400 bad request, that means that there is an account
-       alert("Wrong password or Account Does Not Exist!");
-     }
-   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const user = await log_in(email, password);
+      setUser(user);
+      alert("Success! Welcome!");
+      navigate("/");
+    } catch (error) {
+      alert("Wrong password or Account Does Not Exist!");
+    }
+  };
+
   return (
     <>
       {/* to make background red */}
@@ -28,11 +27,18 @@ export default function Login() {
         {/* to make the form aligned */}
         <div className="container d-flex justify-content-center align-items-center vh-100">
           {/* to add custom css to the form */}
-          <div className="bg-white rounded-xl custom-form">
+          <div className="bg-white rounded-xl custom-form p-5">
             {/* to handle submission of the form */}
             <form onSubmit={(e) => handleSubmit(e)}>
-              {" "}
-              {/* calling to the utilties jsx */}
+              {/* Align and resize the Pokeball image */}
+              <div className="d-flex justify-content-center mb-4">
+                <img
+                  src="/pokeball.png"  // Use absolute path for images in the public folder
+                  alt="Pokeball"
+                  className="w-24 h-24" // Tailwind: change sizes as needed
+                  style={{ width: "100px", height: "100px" }} // Inline styles (if not using Tailwind)
+                />
+              </div>
               <h1 className="d-flex justify-content-center">Welcome!</h1>
               {/* email input */}
               <div className="form-group mt-4">
@@ -64,7 +70,6 @@ export default function Login() {
               {/* click to login */}
               <div className="d-flex justify-content-center mt-3 mb-4">
                 <span>
-                  {" "}
                   Click to <NavLink to="/signup">Sign Up</NavLink>
                 </span>
               </div>

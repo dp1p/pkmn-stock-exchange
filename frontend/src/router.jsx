@@ -6,6 +6,7 @@ import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx"
 import NotFound from "./pages/NotFound.jsx"
 import Watchlist from "./pages/Watchlist.jsx";
+import Pokemon from "./pages/Pokemon.jsx";
 //for tailwind
 import "./index.css";
 //to confirm that there is a user
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/watchlist",
         element: <Watchlist />,
+      },
+      {
+        path: "/pkmn/:pokemon_id", //name is dynamic
+        element: <Pokemon/>
       },
     ],
     errorElement: <NotFound />,

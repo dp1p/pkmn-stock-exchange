@@ -23,4 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 #ignore the .env file with secret keys
-.env 

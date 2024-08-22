@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import App_user
+from portfolio_app.models import Portfolio
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
 	HTTP_200_OK,
@@ -16,18 +17,20 @@ from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 
-class Sign_up(APIView): #we check the user info to see if it is validated, if so, save
-    def post(self, request):
+class Sign_up(APIView): 
+    def post(self, request):# check the user info to see if it is validated, if so, save
         data = request.data.copy()
-        data['username'] = data.get('email') #data['username'] needs to find what our username is set, in this is email
-        try: #if the email is validated
+        data['username'] = data.get('email')  # data['username'] needs to find what our username is set, in this case, it is email
+        try: 
             new_user = App_user(**data) 
             new_user.full_clean()
             new_user.set_password(data.get("password"))
-            new_user.save()
+            new_user.save() 
+            Portfolio.objects.create(user=new_user) # create a portfolio for the new user
+
             token = Token.objects.create(user=new_user)
-            login(request, new_user) #log the new user in
-            response_data = ({'user': new_user.email, 'token': token.key})
+            login(request, new_user)  # Log the new user in
+            response_data = {'user': new_user.email, 'token': token.key}
             return Response(response_data, status=HTTP_201_CREATED)
         except ValidationError as e:
             raise Response(e.message_dict, status=HTTP_400_BAD_REQUEST)

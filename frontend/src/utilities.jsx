@@ -63,6 +63,134 @@ export const logOut = async () => {
     alert("Something went wrong! Try logging out again")
 };
 
+//-------------------------------------------------------
+//-------------------------------------------------------
+//-------------------------------------------------------
+//--------------- GRAB POKEMON ---------------------------
+
+export const fetchPokemonInfo = async (pokemon_id) => {
+  try {
+    // Make a GET request to the API endpoint for fetching Pokémon info
+    const response = await api.get(`pkmn/${pokemon_id}/`);
+    return response.data; // Return the data received from the API
+  } catch (error) {
+    console.error("Failed to fetch Pokémon info:", error);
+    return null; // Return null if there was an error
+  }
+};
+// -------------- VIEW PORTFOLIO --------------------
+export const viewPortfolio = async () => {
+  try {
+    const response = await api.get("portfolio/");
+    return response.data;
+  } catch (error) {
+    console.error("Failed to load portfolio:", error);
+    return null;
+  }
+};
+
+// -------------- BUY POKEMON --------------------
+export const buyPokemon = async (pokemonIdOrName, shares) => {
+  try {
+    const response = await api.post("portfolio/buy/", {
+      pokemon_id_or_name: pokemonIdOrName,
+      shares,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to buy Pokémon:", error);
+    return null;
+  }
+};
+
+// -------------- SELL POKEMON --------------------
+export const sellPokemon = async (pokemonIdOrName, shares) => {
+  try {
+    const response = await api.delete("portfolio/sell/", {
+      data: { pokemon_id_or_name: pokemonIdOrName, shares },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to sell Pokémon:", error);
+    return null;
+  }
+};
+
+
+
+// -------------- CREATE NEW WATCHLIST  --------------------
+
+export const createWatchlist = async (watchlistName) => {
+  try {
+    const response = await api.post('watchlist/create/', { name: watchlistName }); // Send the name in the request body
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create watchlist:', error);
+    return null;
+  }
+};
+
+// -----------GET ALL WATCHLIST  --------------------
+
+export const getAllWatchlists = async () => {
+  try {
+    const response = await api.get('watchlist/');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch watchlists:', error);
+    return null;
+  }
+};
+
+// -----------GET  SPECIFIC WATCHLIST  --------------------
+export const getWatchlist = async (watchlistName) => {
+  try {
+    const response = await api.get(`watchlist/read/${watchlistName}/`);
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch watchlist '${watchlistName}':`, error);
+    return null;
+  }
+};
+
+// ----------- UPDATE A WATCHLIST  --------------------
+export const updateWatchlist = async (watchlistName, pokemonIdOrName) => {
+  try {
+    const response = await api.put(`watchlist/update/${watchlistName}/`, {
+      pokemon_id_or_name: pokemonIdOrName,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to update watchlist '${watchlistName}':`, error);
+    return null;
+  }
+};
+
+// ----------- REMOVE A PKMN FROM A WATCHLIST  --------------------
+export const removeFromWatchlist = async (watchlistName, pokemonIdOrName) => {
+  try {
+    const response = await api.delete(`watchlist/delete/${watchlistName}/pkmn/`, {
+      data: { pokemon_id_or_name: pokemonIdOrName },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to remove Pokémon from watchlist '${watchlistName}':`, error);
+    return null;
+  }
+};
+
+// ----------- DELETE AN ENTIRE WATCHLIST  --------------------
+export const deleteWatchlist = async (watchlistName) => {
+  try {
+    const response = await api.delete(`watchlist/delete/${watchlistName}/`);
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to delete watchlist '${watchlistName}':`, error);
+    return null;
+  }
+};
+
+
 //------TO TEST IF THERE IS A BACKEND CONNECTION
 // import { useEffect } from "react";
 
@@ -81,32 +209,3 @@ export const logOut = async () => {
 //     </div>
 //   );
 // }
-// -------------- GRAB USER BUYING POWER --------------------
-
-export const view_portfolio = async () => {
-  try {
-    //get token first
-    const token = localStorage.getItem("token");
-    if (token) {
-      api.defaults.headers.common["Authorization"] = `Token ${token}`;
-    } else {
-      alert("No token found. Please log in.");
-      return null;
-    }
-    //get portfolio
-    const response = await api.get("portfolio/"); 
-    if (response.status === 200) {
-      return response.data; // Return the portfolio data
-    } else {
-      alert("Failed to load portfolio. Please try again.");
-      return null;
-    }
-  } catch (error) {
-    // Handle any errors (e.g., network errors, server errors)
-    console.error("Failed to fetch portfolio:", error);
-    alert("Failed to load portfolio. Please try again.");
-    return null;
-  }
-};
-
-//--------------------

@@ -27,5 +27,7 @@ urlpatterns = [
     path('api/v1/pkmn/', include("pkmnstock_app.urls")),
     path('api/v1/watchlist/', include("watchlist_app.urls")),
     path('api/v1/portfolio/', include("portfolio_app.urls")),
+    path('api/v1/noun/', include('api_app.urls')),
     path("api/test/", connection_test),
+
 ]
